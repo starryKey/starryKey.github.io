@@ -31,8 +31,8 @@
 <meta property="og:description" content="iOS内存管理之深拷贝和浅拷贝​    浅拷贝和深拷贝是一个很常见的问题，无论是在平时的开发过程中，还是在面试时，几乎都会遇到，当被问到该问题时，大部分的人都会回答说浅拷贝是指针的拷贝，深拷贝是内容的拷贝，这样回答当然没错，但如果被进一步问到浅拷贝和深拷贝是如何实现的呢？对象中的属性是如何拷贝的？集合的拷贝以及集合中的对象如何拷贝呢？等等，如果对以上的问题有些许疑惑，接下来我们一起探索一下。 ​">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://yoursite.com/2020/10/25/images/浅拷贝和深拷贝.png">
-<meta property="og:image" content="http://yoursite.com/Users/wol/Desktop/公众号/内容篇/iOS/images/集合的深浅拷贝.png">
-<meta property="og:updated_time" content="2020-10-25T13:47:09.655Z">
+<meta property="og:image" content="http://yoursite.com/2020/10/25/images/集合的深浅拷贝.png">
+<meta property="og:updated_time" content="2020-10-26T14:37:49.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS内存管理之深拷贝与浅拷贝">
 <meta name="twitter:description" content="iOS内存管理之深拷贝和浅拷贝​    浅拷贝和深拷贝是一个很常见的问题，无论是在平时的开发过程中，还是在面试时，几乎都会遇到，当被问到该问题时，大部分的人都会回答说浅拷贝是指针的拷贝，深拷贝是内容的拷贝，这样回答当然没错，但如果被进一步问到浅拷贝和深拷贝是如何实现的呢？对象中的属性是如何拷贝的？集合的拷贝以及集合中的对象如何拷贝呢？等等，如果对以上的问题有些许疑惑，接下来我们一起探索一下。 ​">
@@ -193,10 +193,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-10-25 21:27:44 / 修改时间：21:47:09" itemprop="dateCreated datePublished" datetime="2020-10-25T21:27:44+08:00">2020-10-25</time>
+              <time title="创建时间：2020-10-25 21:27:44" itemprop="dateCreated datePublished" datetime="2020-10-25T21:27:44+08:00">2020-10-25</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-26 22:37:49" itemprop="dateModified" datetime="2020-10-26T22:37:49+08:00">2020-10-26</time>
+              </span>
 
           
 
@@ -241,7 +247,7 @@
 <li>对象中的属性，遵循可变类型的属性无论是<code>copy</code>还是<code>mutableCopy</code>都会产生新的对象，均为深拷贝；非可变类型的属性，<code>copy</code>时没有产生新的对象，为指针拷贝，即浅拷贝；<code>mutableCopy</code>时产生新的对象，为内容拷贝，即深拷贝。</li>
 </ul>
 <h2 id="集合的的拷贝"><a href="#集合的的拷贝" class="headerlink" title="集合的的拷贝"></a>集合的的拷贝</h2><p>针对集合的拷贝，<a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Collections/Articles/Copying.html" target="_blank" rel="noopener">Apple官方</a>给的示意图如下：</p>
-<p><img src="/Users/wol/Desktop/公众号/内容篇/iOS/images/集合的深浅拷贝.png" alt="集合的深浅拷贝"></p>
+<p><img src="./../images/集合的深浅拷贝.png" alt="集合的深浅拷贝"></p>
 <p>之所以将集合对象拿出来单独处理，原因在于集合中会包含很多的对象，这些对象也需要区分深拷贝与浅拷贝，更深一些，集合中也可能包含集合对象，如此一来，显得更加麻烦。接下来将以<code>NSArray</code>的深拷贝与浅拷贝，将集合的深浅拷贝分为四种情况进一步了解：</p>
 <h3 id="1、浅拷贝"><a href="#1、浅拷贝" class="headerlink" title="1、浅拷贝"></a>1、浅拷贝</h3><p><strong>代码如下：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSArray *oriArr = [NSArray arrayWithObjects:@&quot;test&quot;, nil];</span><br><span class="line">NSArray *copyArr = [oriArr copy];</span><br><span class="line">NSLog(@&quot;%p&quot;, oriArr);</span><br><span class="line">NSLog(@&quot;%p&quot;, copyArr);</span><br></pre></td></tr></table></figure>
@@ -293,7 +299,10 @@
     <a href="/2020/09/20/Xcode小技巧之Snippet/" rel="prev" title="Xcode小技巧之Snippet">
       <i class="fa fa-chevron-left"></i> Xcode小技巧之Snippet
     </a></div>
-      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/21/一文读懂iOS内存管理之概念篇/" rel="next" title="一文读懂iOS内存管理之概念篇">
+      一文读懂iOS内存管理之概念篇 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
       </footer>
     
@@ -367,7 +376,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
