@@ -190,7 +190,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-11-21 12:04:48 / 修改时间：13:41:59" itemprop="dateCreated datePublished" datetime="2020-11-21T12:04:48+08:00">2020-11-21</time>
+              <time title="创建时间：2020-11-21 12:04:48 / 修改时间：15:00:55" itemprop="dateCreated datePublished" datetime="2020-11-21T12:04:48+08:00">2020-11-21</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -214,7 +214,10 @@
 
       
           <h1 id="内存管理"><a href="#内存管理" class="headerlink" title="内存管理"></a>内存管理</h1><blockquote>
-<p>为什么需要内存管理？原因在于如果没有内存管理，程序在运行的过程中不但不能释放不再使用的内存，而且还会不停地分配内存，这样占用的内存就会越来越多，程序速度也会越来越慢，最后甚至会因为内存耗尽而崩溃，因此需要妥善管理内存。</p>
+<p>更多文章，参考<a href="https://www.yuque.com/focus-vtfvc/fgzn2g/vgfbd8" target="_blank" rel="noopener">个人雨雀站点</a></p>
+</blockquote>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>为什么需要内存管理？原因在于如果没有内存管理，程序在运行的过程中不但不能释放不再使用的内存，而且还会不停地分配内存，这样占用的内存就会越来越多，程序速度也会越来越慢，最后甚至会因为内存耗尽而崩溃，因此需要妥善管理内存。</p>
+<blockquote>
 <p>内存消耗: 当应用程序启动后，除了代码和系统数据会消耗一部分内存外，开发者在程序中创建的任何对象都会消耗内存。</p>
 </blockquote>
 <h2 id="内存分区"><a href="#内存分区" class="headerlink" title="内存分区"></a>内存分区</h2><p>在iOS程序中，内存通常被分为如下5个区域（内核区及保留区暂不探讨）：</p>
@@ -251,7 +254,7 @@
 <h3 id="一、Tagged-Pointer"><a href="#一、Tagged-Pointer" class="headerlink" title="一、Tagged Pointer"></a>一、Tagged Pointer</h3><blockquote>
 <p>在2013年9月，Apple发布了iPhone5S，而5S是首部采用64位架构的A7双核处理器，为了节省内存和提高执行效率，Apple提出了<code>Tagged Pointer</code>的概念，可以在<a href="https://developer.apple.com/videos/play/wwdc2013/404/" target="_blank" rel="noopener">WWDC2013 Advances in Objective-C Session 404</a>了解。</p>
 </blockquote>
-<h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>关于<code>Tagged Pointer</code>,Apple官方给出的解释如下图：<img src="./../images/taggedPointer.png" alt="taggedPointer"></p>
+<h4 id="概述-1"><a href="#概述-1" class="headerlink" title="概述"></a>概述</h4><p>关于<code>Tagged Pointer</code>,Apple官方给出的解释如下图：<img src="./../images/taggedPointer.png" alt="taggedPointer"></p>
 <p>业内大佬<a href="https://blog.devtang.com" target="_blank" rel="noopener">唐巧</a>有一篇文章<a href="https://blog.devtang.com/2014/05/30/understand-tagged-pointer/" target="_blank" rel="noopener">深入理解Tagged Pointer</a>有了详细的描述，有兴趣的可以去阅读下。这里可以概括下：Apple引入<code>Tagged Pointer</code>原因是从32位机器迁移到64位的机器上，虽然逻辑没有任何变化，但是像这种简单的数据类型如NSNumber、NSDate以及NSString类型（简短的字符串）一类对象所占的内存会翻倍。正常情况下，如果这个整数只是一个 NSInteger 的普通变量，那么它所占用的内存是与 CPU 的位数有关，在 32 位 CPU 下占 4 个字节，在 64 位 CPU 下是占 8 个字节的。而指针类型的大小通常也是与 CPU 位数相关，一个指针所占用的内存在 32 位 CPU 下为 4 个字节，在 64 位 CPU 下也是 8 个字节。通过以下两张图更直观的了解下：</p>
 <p>​        <strong>未引入<code>Tagged Pointer</code>时：</strong></p>
 <p><img src="./../images/tagged_pointer_before.jpg" alt="tagged_pointer_before"></p>
@@ -1730,10 +1733,40 @@
     </div>
     <ul class="links-of-blogroll-list">
         <li class="links-of-blogroll-item">
+          <a href="https://github.com/onevcat" title="https://github.com/onevcat" rel="noopener" target="_blank">onevcat</a>
+        </li>
+        <li class="links-of-blogroll-item">
           <a href="https://blog.ibireme.com" title="https://blog.ibireme.com" rel="noopener" target="_blank">伽蓝之堂一只魔法师的工坊</a>
         </li>
         <li class="links-of-blogroll-item">
+          <a href="https://zhuanlan.zhihu.com/mrpeak" title="https://zhuanlan.zhihu.com/mrpeak" rel="noopener" target="_blank">MrPeak杂货铺</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://chuquan.me/" title="http://chuquan.me/" rel="noopener" target="_blank">楚权</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://ming1016.github.io/" title="https://ming1016.github.io/" rel="noopener" target="_blank">星光社-戴铭</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://zhuanlan.zhihu.com/zangqilong" title="https://zhuanlan.zhihu.com/zangqilong" rel="noopener" target="_blank">叶孤城</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://draveness.me/" title="https://draveness.me/" rel="noopener" target="_blank">draveness</a>
+        </li>
+        <li class="links-of-blogroll-item">
           <a href="https://halfrost.com" title="https://halfrost.com" rel="noopener" target="_blank">冰霜之地</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.desgard.com/" title="https://www.desgard.com/" rel="noopener" target="_blank">冬瓜</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://xin-tan.com/" title="https://xin-tan.com/" rel="noopener" target="_blank">心谭博客</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.objc.io/" title="https://www.objc.io/" rel="noopener" target="_blank">objc.io</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://objccn.io/" title="https://objccn.io/" rel="noopener" target="_blank">objc中国</a>
         </li>
     </ul>
   </div>
