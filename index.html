@@ -190,7 +190,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-11-21 12:04:48 / 修改时间：12:09:33" itemprop="dateCreated datePublished" datetime="2020-11-21T12:04:48+08:00">2020-11-21</time>
+              <time title="创建时间：2020-11-21 12:04:48 / 修改时间：12:19:41" itemprop="dateCreated datePublished" datetime="2020-11-21T12:04:48+08:00">2020-11-21</time>
             </span>
 
           
@@ -245,9 +245,9 @@
 <h4 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h4><p>关于<code>Tagged Pointer</code>,Apple官方给出的解释如下图：<img src="./../images/taggedPointer.png" alt="taggedPointer"></p>
 <p>业内大佬<a href="https://blog.devtang.com" target="_blank" rel="noopener">唐巧</a>有一篇文章<a href="https://blog.devtang.com/2014/05/30/understand-tagged-pointer/" target="_blank" rel="noopener">深入理解Tagged Pointer</a>有了详细的描述，有兴趣的可以去阅读下。这里可以概括下：Apple引入<code>Tagged Pointer</code>原因是从32位机器迁移到64位的机器上，虽然逻辑没有任何变化，但是像这种简单的数据类型如NSNumber、NSDate以及NSString类型（简短的字符串）一类对象所占的内存会翻倍。正常情况下，如果这个整数只是一个 NSInteger 的普通变量，那么它所占用的内存是与 CPU 的位数有关，在 32 位 CPU 下占 4 个字节，在 64 位 CPU 下是占 8 个字节的。而指针类型的大小通常也是与 CPU 位数相关，一个指针所占用的内存在 32 位 CPU 下为 4 个字节，在 64 位 CPU 下也是 8 个字节。通过以下两张图更直观的了解下：</p>
 <p>​        <strong>未引入<code>Tagged Pointer</code>时：</strong></p>
-<p><img src="./../images/公众号/内容篇/iOS/images/内存管理/tagged_pointer_before.jpg" alt="tagged_pointer_before"></p>
+<p><img src="./../images/tagged_pointer_before.jpg" alt="tagged_pointer_before"></p>
 <p>​    <strong>引入<code>Tagged Pointer</code>后：</strong></p>
-<p><img src="./../images/公众号/内容篇/iOS/images/内存管理/tagged_pointer_after.jpg" alt="tagged_pointer_after"></p>
+<p><img src="./../images/tagged_pointer_after.jpg" alt="tagged_pointer_after"></p>
 <p>通过以上的初步了解可以知道：</p>
 <ul>
 <li><code>Tagged Pointer</code>是专门用来存储小的对象，例如NSNumber和NSDate；</li>
@@ -310,7 +310,7 @@
 <p>在剩余的字段中，我们可以赋予他所包含的数据,在 Intel 中，我们 Tagged Pointer 对象的表示如下:</p>
 <p><img src="./../images/tagpayload.png" alt="tagpayload"></p>
 <p><code>OBJC_TAG_RESERVED_7</code>类型的是个例外，目前属于保留类型，它可以将接下来后 8 位作为它的扩展类型字段，基于此我们可以多支持 256 中类型的 Tagged Pointer，如 UIColors 或 NSIndexSets 之类的对象。</p>
-<p><img src="/Users/wol/Downloads/tag7ext.png" alt="tag7ext"></p>
+<p><img src="./../images/tag7ext.png" alt="tag7ext"></p>
 <p>在arm64上<code>Tagged Pointer</code>的格式有了些变化：</p>
 <p><img src="./../images/arm64tag.png" alt="arm64tag"></p>
 <p>我们使用最高位代表 Tagged Pointer 标识位，最低位 3 位标识 Tagged Pointer 的类型，接下去的位来表示包含的数据（可能包含扩展类型字段），为什么我们使用高位指示 ARM上 的 Tagged Pointer，而不是像 Intel 一样使用低位标记？</p>
@@ -458,7 +458,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">+ (id)copyWithZone:(struct _NSZone *)zone &#123;</span><br><span class="line">    return (id)self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)copy &#123;</span><br><span class="line">    return [(id)self copyWithZone:nil];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">+ (id)mutableCopyWithZone:(struct _NSZone *)zone &#123;</span><br><span class="line">    return (id)self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (id)mutableCopy &#123;</span><br><span class="line">    return [(id)self mutableCopyWithZone:nil];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>copy</code>和<code>mutableCopy</code>两个方法只是简单的调用了<code>copyWithZone:</code>和<code>mutableCopyWithZone:</code>。两者的区别<code>copy</code>方法用于复制对象的副本。通常来说，copy方法总是返回对象的不可修改的副本，即使对象本身是可修改的。例如，NSMutableString调用copy方法，将会返回不可修改的字符串对象。<code>mutableCopy</code>方法用于复制对象的可变副本。通常来说，<code>mutableCopy</code>方法总是返回对象可修改的副本，即使被复制的对象本身是不可修改的。</p>
 <p><a href="https://developer.apple.com/library/archive/documentation/General/Conceptual/DevPedia-CocoaCore/ObjectCopying.html" target="_blank" rel="noopener">Apple官方</a>针对浅拷贝和深拷贝的示意图如下：</p>
-<p><img src="./../images/公众号/内容篇/iOS/images/浅拷贝和深拷贝.png" alt="浅拷贝和深拷贝"></p>
+<p><img src="./../images/浅拷贝和深拷贝.png" alt="浅拷贝和深拷贝"></p>
 <p>通过示意图可以初步了解到：浅拷贝的对象指向同一个地址，即指针的拷贝；深拷贝的对象指向不同的地址，即内容的拷贝。</p>
 <p>Talk is cheap, show me the code.接下来通过具体的实践进一步了解分析<code>NSString</code>、<code>NSMutableString</code>以及自定义对象<code>TestModel</code>的拷贝:</p>
 <h5 id="NSString"><a href="#NSString" class="headerlink" title="NSString"></a>NSString</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// NSString</span><br><span class="line">- (void)testStringCopy&#123;</span><br><span class="line">    NSString *str = @&quot;original value&quot;;</span><br><span class="line">    NSString *copyStr = [str copy];</span><br><span class="line">    NSMutableString *mutableCopyStr = [str mutableCopy];</span><br><span class="line">    NSLog(@&quot;地址:%p 值:%@&quot;, str, str);</span><br><span class="line">    NSLog(@&quot;地址:%p 值:%@&quot;, copyStr, copyStr);</span><br><span class="line">    NSLog(@&quot;地址:%p 值:%@&quot;, mutableCopyStr, mutableCopyStr);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -485,7 +485,7 @@
 <li>对象中的属性，遵循可变类型的属性无论是<code>copy</code>还是<code>mutableCopy</code>都会产生新的对象，均为深拷贝；非可变类型的属性，<code>copy</code>时没有产生新的对象，为指针拷贝，即浅拷贝；<code>mutableCopy</code>时产生新的对象，为内容拷贝，即深拷贝。</li>
 </ul>
 <h5 id="集合的的拷贝"><a href="#集合的的拷贝" class="headerlink" title="集合的的拷贝"></a>集合的的拷贝</h5><p>针对集合的拷贝，<a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/Collections/Articles/Copying.html" target="_blank" rel="noopener">Apple官方</a>给的示意图如下：</p>
-<p><img src="./../images/公众号/内容篇/iOS/images/集合的深浅拷贝.png" alt="集合的深浅拷贝"></p>
+<p><img src="./../image/集合的深浅拷贝.png" alt="集合的深浅拷贝"></p>
 <p>之所以将集合对象拿出来单独处理，原因在于集合中会包含很多的对象，这些对象也需要区分深拷贝与浅拷贝，更深一些，集合中也可能包含集合对象，如此一来，显得更加麻烦。接下来将以<code>NSArray</code>的深拷贝与浅拷贝，将集合的深浅拷贝分为四种情况进一步了解：</p>
 <h6 id="1、浅拷贝"><a href="#1、浅拷贝" class="headerlink" title="1、浅拷贝"></a>1、浅拷贝</h6><p><strong>代码如下：</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">NSArray *oriArr = [NSArray arrayWithObjects:@&quot;test&quot;, nil];</span><br><span class="line">NSArray *copyArr = [oriArr copy];</span><br><span class="line">NSLog(@&quot;%p&quot;, oriArr);</span><br><span class="line">NSLog(@&quot;%p&quot;, copyArr);</span><br></pre></td></tr></table></figure>
