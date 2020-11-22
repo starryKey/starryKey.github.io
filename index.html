@@ -188,10 +188,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-11-21 12:04:48 / 修改时间：15:00:55" itemprop="dateCreated datePublished" datetime="2020-11-21T12:04:48+08:00">2020-11-21</time>
+              <time title="创建时间：2020-11-21 12:04:48" itemprop="dateCreated datePublished" datetime="2020-11-21T12:04:48+08:00">2020-11-21</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-22 22:00:58" itemprop="dateModified" datetime="2020-11-22T22:00:58+08:00">2020-11-22</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -535,8 +541,6 @@
 <p>使用<code>alloc</code>/<code>new</code>/<code>copy</code>/<code>mutableCopy</code>方法生成并持有的对象，或者使用<code>retain</code>方法持有的对象,一旦不再需要，务必需要使用<code>release</code>方法进行释放。内存释放实质上是通过dealloc方法，当对象的引用计数值达到0的时候，系统就知道这个对象不再需要了。此时，Objective-C会自动向对象发送一条dealloc的消息来释放内存。</p>
 <p>但是针对如<code>NSMutableArray</code>类的<code>array</code>类方法等可以取得谁都不持有的对象，又通过什么方法释放呢？答案是<code>autorelease</code>方法。<code>autorelease</code>方法提供这样的功能，使对象在超出指定的生存范围时能够自动并正确地释放。</p>
 <h4 id="NSAutoreleasePool"><a href="#NSAutoreleasePool" class="headerlink" title="NSAutoreleasePool"></a>NSAutoreleasePool</h4><p><a href="https://developer.apple.com/documentation/foundation/nsautoreleasepool" target="_blank" rel="noopener">NSAutoreleasePool</a>是 Cocoa 用来支持引用计数内存管理机制的类，是一种对象自动释放的机制，这种机制的基本思想是把所有需要发送release消息的对象都记录下来（放到自动释放池中），当一个AutoreleasePool(自动释放池)被销毁的时候，会给这些对象一起发送release消息，其中<code>NSAutoreleasePool</code>起到了记录的作用。在MRC环境下使用，ARC环境下使用<code>@autoreleasepool{ ** }</code>。</p>
-<p>示例：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Person * pA = [[Person alloc] init];</span><br><span class="line">[pA autorelease];   // 将对象放入自动释放池pool中</span><br><span class="line">Person * pB = pA;</span><br><span class="line">[pB retain];        // 如果没有该步骤，引用计数为1</span><br><span class="line">NSLog(@&quot;pool release前：retainCount: %lu&quot;,[pA retainCount]); //pA引用计数为2</span><br><span class="line">[pool release]; //销毁自动释放池，自动释放池中所有的对象也被销毁。此时pA引用计数减1</span><br><span class="line">NSLog(@&quot;pool release后：retainCount: %lu&quot;,[pA retainCount]); //pA引用计数为1</span><br></pre></td></tr></table></figure>
 <h4 id="release和autorelease的区别"><a href="#release和autorelease的区别" class="headerlink" title="release和autorelease的区别"></a>release和autorelease的区别</h4><p>release是在对象的引用计数为0是，立即释放对象（调用dealloc函数），而autorelease不立即释放对象，只是将对象注册到autoreleasepool中，当pool结束时，自动调用release方法。     </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">id pool = [[NSAutoreleasePool alloc] init];</span><br><span class="line">  Person * pA = [[Person alloc] init];</span><br><span class="line">  [pA autorelease];           // 将对象放入自动释放池pool中，不会立即释放对象</span><br><span class="line">  Person * pB = pA;</span><br><span class="line">  [pB retain];                // 如果没有该步骤，引用计数为1</span><br><span class="line">  NSLog(@&quot;pool release前：retainCount: %lu&quot;,[pA retainCount]); //pA引用计数为2</span><br><span class="line">  [pool release];             //销毁自动释放池，自动释放池中所有的对象也被销毁。此时pA引用计数减1</span><br><span class="line">  NSLog(@&quot;pool release后：retainCount: %lu&quot;,[pA retainCount]); //pA引用计数为1</span><br></pre></td></tr></table></figure>
 <h4 id="关于autorelease"><a href="#关于autorelease" class="headerlink" title="关于autorelease"></a>关于autorelease</h4><p><code>autorelease</code>顾名思义，就是自动释放。<code>autorelease</code>会像C语言的自动变量那样对待对象实例。当超出其作用域时，对象实例的<code>release</code>实例方法被调用。同C语言不同的是，编程人员可以设定变量的作用域。</p>
@@ -562,7 +566,7 @@
 <li>自动释放池是一个以栈为节点的结构，拥有栈的特性，即先进后出；</li>
 <li>自动释放池的节点可以是对象，即可以被释放；</li>
 <li>自动释放池的数据结构是双向链表；</li>
-<li>自动释放池跟县城相关。</li>
+<li>自动释放池跟线程相关。</li>
 </ul>
 <p>在main.m文件中，通过命令行<code>clang -S -fobjc-arc main.m -o main.s</code>，可以查看到对应的汇编代码，其中相关代码为：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">callq	_objc_autoreleasePoolPush</span><br><span class="line">movq	%rax, %rdi</span><br><span class="line">callq	_objc_autoreleasePoolPop</span><br></pre></td></tr></table></figure>
@@ -829,32 +833,32 @@
 <tr>
 <td>assign</td>
 <td>__unsafe_unretained</td>
-<td>通常用于修饰基本数据类型</td>
+<td>直接赋值，和引用计数无关，用来修饰简单数据类型的属性，如int</td>
 </tr>
 <tr>
 <td>copy</td>
 <td>__strong（但是赋值的是被复制的对象）</td>
-<td>修饰NSString,NSMutableString,Block等</td>
+<td>跟strong类似，但是设置方法并不保留新值，而是copy一份。修饰NSString,NSMutableString,Block等</td>
 </tr>
 <tr>
 <td>retain</td>
 <td>__strong</td>
-<td>修饰对象类型</td>
+<td>对旧值进行释放，并强引用新的对象，使其引用计数+1，用在MRC中型</td>
 </tr>
 <tr>
 <td>strong</td>
 <td>__strong</td>
-<td>修饰对象类型</td>
+<td>对新对象进行强引用，释放旧对象，使其引用计数+1。为这种属性设置新值时，设置方法会先保留新值，并释放旧值，然后再将新值设置上去。型</td>
 </tr>
 <tr>
 <td>unsafe_unretained</td>
 <td>__unsafe_unretained</td>
-<td>几乎没用到</td>
+<td>不安全的弱引用，与weak不同的是，如果引用的对象不可用，则当前指针不会被置为nil,会产生野指针。到</td>
 </tr>
 <tr>
 <td>weak</td>
 <td>__weak</td>
-<td>修饰代理</td>
+<td>弱引用，不对对象所赋值的对象进行持有，但是是安全的。为这种属性设置新值时，设置方法既不保留新值，也不释放旧值。在属性所指的对象被销毁时，属性值会清空，即置为nil。</td>
 </tr>
 </tbody>
 </table>
@@ -934,7 +938,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-21 13:42:10" itemprop="dateModified" datetime="2020-11-21T13:42:10+08:00">2020-11-21</time>
+                <time title="修改时间：2020-11-21 15:36:21" itemprop="dateModified" datetime="2020-11-21T15:36:21+08:00">2020-11-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1745,7 +1749,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
